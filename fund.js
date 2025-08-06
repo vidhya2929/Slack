@@ -291,3 +291,204 @@ function deepClone(obj){
   }
   return clone;
 }
+
+
+// USE SPREAD TO MERGE TWO ARRAYS AND REMOVE DUPLICATES
+const array1 = [1,2,3]; //array 1
+const array2 = [3,4,5]; // array 2
+//  3 is repeated in both
+const merged = [...new Set([...array1, ...array2])];
+// ... is called the spread operator
+// It spreads the values of the arrays
+// this makes a new array like [1,2,3,3,4,5]
+
+// new Set([...array1, ...array2])
+// Set keeps only unique values 
+// so new Set({1,2,3,3,4,5}) becomes:
+//  Set{1,2,3,4,5}
+
+// [...new Set([...array1, ...array2])]
+// this spreads the Set back into an array
+// now it becomes [1,2,3,4,5]
+console.log(merged);
+
+// WRITE A FUNCTION USING DESTRUCTURED PARAMETERS
+  // Usually objects are passed to function is like
+  // function greet(person)
+  // {
+  // console.log(person.name);
+  // console.log(person.age);
+  // }
+  function greet({name,age}){
+    // here pulls out "name" and "age" directly from the object
+    // Inside this function we can use "name" and "age" directly -no need for person.name
+    console.log(`Hello, ${name}! You are ${age} years old.`);
+  }
+  greet({ name: "Riya", age: 22});
+  // we are passing an object so the function see:
+  // name = "Riya"
+  // age = 22
+
+
+  // Destructuring => shortcut to pull out values from an object in the function parameter itself.
+
+  // REUSABLE MATH UTILITIES MODULE(IMPORT/EXPORT)
+   
+  // "export" makes each function available outside this file
+  export function add(a,b){
+    return a + b;
+  }
+  export function subtract(a,b){
+    return a - b;
+  }
+  export function multiply(a,b){
+    return a * b;
+  }
+
+  export function divide(a,b){
+    if(b === 0) throw new Error("Division by zero");
+    return b !== 0 ? a/b : null;
+  }
+
+  // Asynchronous JavaScript
+  // a) Simulate API Call Using setTimeout
+  function fakeApiCall(){
+    setTimeout(() => {
+      // setTimeout() is an built in function in javascript
+      console.log("Data fetched from API!");
+    },2000);
+    // waits for 2 seconds, then print that message
+  }
+  fakeApiCall();
+  // waits 2 seconds then logs
+
+// callback
+  function getData(callback){
+    // here getData  takes one parameter "callback"
+    // A callback is just a function you give as an input , to be called later
+    setTimeout(()=>{
+      callback("Data received!");
+    }, 1000);
+  }
+  // getData takes a callback function as an argument
+  // callback inside callback is called callback hell.
+
+  // Promises
+// A promise is a built-in javascript object used to handle asynchronous work like API calls or timeouts
+function getDataPromise(){
+   //here the above function returns a promise  
+  return new Promise((resolve) => {
+    // creating a new promise
+    //  promise has -:
+    // 1) resolve ->tells JS this is done successfully
+    //  2) reject -> tells JS that something went wrong
+    setTimeout(()=>{
+      resolve("Data received!");
+    }, 1000);
+  });
+}
+getDataPromise().then(console.log);
+// .then() is used to handle the result when the Promise is done
+// It receives whatever that is passed to resolve(...)
+
+// Chain multiple Promises
+// Fetching a user from a server
+// fetching that user's posts
+// printing the posts
+
+function fetchUser(){
+  return new Promise(resolve => {
+    setTimeout(() => resolve ({userId: 1}), 1000);
+  });
+}
+function fetchPosts(user){
+  return new Promise(resolve =>{
+    setTimeout(()=> resolve ([`post for user ${user.userId}`]),1000);
+  });
+}
+fetchUser()
+.then(user => fetchPosts(user))
+.then(posts => console.log(posts));
+
+// Retry a Failed Promise 3 Times Before Rejecting
+
+// An unstable API that randomly suceeds or fails
+// A retry mechanism that tries the API upto to 3 times if it fails
+// It logs success if the call works, or an error after 3 failed attempts
+function unstableApiCall(){
+  return new Promise((resolve, reject)=>{
+    const success = Math.random() > 0.7;
+    setTimeout(()=>{
+      success ? resolve("Success!") : reject("Failed!");
+    }, 500);
+  });
+}
+// After 0.5 seconds delay, either:
+// resolve("Success!") - if success
+// reject("Failed!") - if failed
+
+
+// The Retry Function
+
+function retry(apiFunc, retries = 3){
+  // apiFunc => the unstable API function
+  // retries -> how many times to try (default is 3)
+  return new Promise((resolve, reject) =>{
+    function attempt(n){
+      // it starts trying using the inner function attempt(n)
+      apiFunc() //if apiFunc() succeeds, it resolves.
+      .then(resolve)
+      // if it fails, it checks if n is 0
+      .catch(err => {
+        if(n=== 0){
+          reject("All retries failed");
+        }
+        else{
+          console.log(`Retrying...(${3 - n + 1})`);
+          // n is the number of retries remaining
+          // 3 is the total number of retries  started with
+          // 3 - n + 1 => represents how many times you have retried so far, not how many are left
+          attempt(n-1);
+        }
+      });
+    }
+    attempt(retries);
+  });
+}
+retry(unstableApiCall).then(console.log).catch(console.error);
+// retry(unstableApiCall) this starts retry process
+// if successful in any attempt -> prints "Successs!!"
+// if all attempts fail -> prints "All retries failed"
+
+// DOM MANIPULATION & EVENTS
+
+const btn = document.querySelector("#myBtn");
+const allItems = document.querySelectorAll(".item");
+const input = document.getElementById("myInput");
+// querySelector() => Selects the first matching element(CSS selector).
+// querySelectorAll() => Selects all matching elements.
+// getElementById()/ getelementByClassName() -> Older methods.
+
+// CHANGING CONTENT AND STYLES
+const heading = document.querySelector("h1");
+heading.textContent = "Updated Text";
+// element.textContent or innerHTML -> Change text or HTML inside.
+heading.style.color = "red";
+// element.style -> Directly changes styles
+
+// ADDING EVENT LISTENERS
+const btnn = document.querySelector('#clickBtn');
+
+btnn.addEventListener("click", ()=> {
+  // element.addEventListener('event',function)
+  // Common events : click, input, submit, mouseover
+  alert("Button clicked!");
+});
+
+// CREATING / REMOVING ELEMENTS
+const newItem = document.createElement("li");
+newItem.textContent = "New Task";
+document.querySelector("ul").appendChild(newItem);
+
+// REMOVE
+newItem.remove();

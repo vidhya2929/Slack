@@ -1,0 +1,11 @@
+/* default light mode(no need to define anything extra) */
+.darkMode{
+  background-color: #121212;
+  color: white;
+}
+/* we are using a CSS class called .dark-mode 
+when we add this to body then the page gets dark colors*/
+/* if we remove the class, it returns to light mode*/
+
+
+
