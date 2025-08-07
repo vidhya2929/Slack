@@ -7,5 +7,35 @@
 when we add this to body then the page gets dark colors*/
 /* if we remove the class, it returns to light mode*/
 
-
-
+.todoInput{
+  padding: 10px;
+  border: 2px solid red;
+  display: block;
+  background-color: white;
+  margin-bottom: 10px;
+}
+input::placeholder{
+  /* psuedo element => targets a (specific)part of an element  */
+  color: red;
+  font-style: italic;
+}
+input:focus{
+  /* psuedo class => defines a special state of an element
+  style the element when it is in a particular condition */
+ border-color: rgb(20, 207, 114);
+ outline: none;
+  
+}
+#addBtn{
+  color: red;
+  border:3px solid rgb(85, 11, 11);
+  background-color: white;
+}
+#toggleBtn{
+  color: red;
+  background-color: white;
+  border: 3px solid rgb(85, 11, 11);
+}
+#todoList{
+  list-style-type: none;
+}
